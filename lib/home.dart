@@ -22,9 +22,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   final List<Widget> _pages = [
-    TaskPage(),
-    WorksPage(),
-    SessionPage()
+    const TaskPage(),
+    const WorksPage(),
+    const SessionPage()
   ];
 
   @override
@@ -32,6 +32,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: _pages[_index],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.black,
+        unselectedItemColor: Colors.white38,
+        selectedItemColor: Colors.redAccent,
         iconSize: 30,
         selectedFontSize: 17,
         unselectedFontSize: 17,
