@@ -1,13 +1,16 @@
+import 'package:critique_corner/session.dart';
+import 'package:critique_corner/works.dart';
 import 'package:flutter/material.dart';
 
-class TasksProfilePage extends StatefulWidget {
-  const TasksProfilePage({super.key});
+class TaskPage extends StatefulWidget {
+  const TaskPage({super.key});
 
   @override
-  State<TasksProfilePage> createState() => _TasksProfilePageState();
+  State<TaskPage> createState() => _TaskPage();
 }
 
-class _TasksProfilePageState extends State<TasksProfilePage> {
+class _TaskPage extends State<TaskPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,34 +58,6 @@ class _TasksProfilePageState extends State<TasksProfilePage> {
               ],
             ),
           ),
-          Expanded(
-            flex:15,
-            child: Row(
-              children: [
-                const Expanded(
-                  child: IconButton(
-                      iconSize: 45,
-                      onPressed: null,
-                      icon: Icon(Icons.task_alt)
-                  ),
-                ),
-                Expanded(
-                  child: IconButton(
-                      iconSize: 45,
-                      onPressed: () {},
-                      icon: const Icon(Icons.image)
-                  ),
-                ),
-                Expanded(
-                  child: IconButton(
-                      iconSize: 45,
-                      onPressed: () {},
-                      icon: const Icon(Icons.timer)
-                  ),
-                ),
-              ],
-            ),
-          )
         ],
       ),
     );
