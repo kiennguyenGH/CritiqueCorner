@@ -5,4 +5,11 @@ class Task {
   TimeOfDay time;
   bool isEnabled;
   Task(this.taskName, this.time, this.isEnabled);
+
+  @override
+  String toString()
+  {
+    return taskName;
+  }
+
 }

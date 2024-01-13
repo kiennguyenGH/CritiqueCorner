@@ -1,3 +1,5 @@
+import 'package:critique_corner/add_task.dart';
+import 'package:critique_corner/task_item.dart';
 import 'package:flutter/material.dart';
 
 class TaskPage extends StatefulWidget {
@@ -12,8 +14,33 @@ class _TaskPage extends State<TaskPage> {
   bool _isEditMode = false;
   String _editModeText = "Edit";
 
+  void createNewTask(Task newTask)
+  {
+    setState(() {
+      if (newTask != null)
+      {
+        taskList.add(newTask);
+      }
+    });
+  }
 
-  final List<String> taskList = <String> ["one", "two", "three"];
+  void deleteTask(int index)
+  {
+    setState(() {
+      taskList.remove(taskList[index]);
+    });
+  }
+
+  // void createAlert()
+  // {
+  //   showDialog(context: context,
+  //   builder:(context)
+  //   {
+  //     return const DialogBox();
+  //   });
+  // }
+
+  List<Task> taskList = <Task> [];
 
   void _editModeToggle() {
     setState(() {
@@ -50,7 +77,13 @@ class _TaskPage extends State<TaskPage> {
             IconButton(
               color: Colors.redAccent,
               iconSize: 30,
-              onPressed: () {},
+              onPressed: () async {
+                final newValue = await Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => const AddTaskPage())
+                );
+                createNewTask(newValue);
+
+              },
               icon: const Icon(Icons.add)
           ),
         ],
@@ -74,7 +107,48 @@ class _TaskPage extends State<TaskPage> {
                           visible: _isEditMode,
                           child: IconButton(
                             iconSize: 35,
-                            onPressed: () {},
+                            onPressed: () async {
+                              showDialog(context: context, builder:(context)
+                                {
+                                  return AlertDialog(
+                                      backgroundColor: Colors.white12,
+                                      content: SizedBox(
+                                          height: 120,
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              const Text("Delete task?", style: TextStyle(color: Colors.white, fontSize: 20),),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 100,
+                                                    child: FloatingActionButton(
+                                                      child: const Text("Cancel"),
+                                                      onPressed: (){
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 100,
+                                                    child: FloatingActionButton(
+                                                      child: const Text("Confirm"),
+                                                      onPressed: (){
+                                                        Navigator.pop(context);
+                                                        deleteTask(index);
+                                                      },
+
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          )
+                                      )
+                                  );;
+                                });
+                            },
                             icon: const Icon(Icons.delete),
                             color: Colors.redAccent,
                           ),
@@ -82,16 +156,18 @@ class _TaskPage extends State<TaskPage> {
                       ),
                       Container(
                         margin: const EdgeInsets.only(left: 10),
-                        child: const Column(
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(style: TextStyle(color: Colors.white, fontSize: 20), "Task Name"),
-                            Text(style: TextStyle(color: Colors.white, fontSize: 17), "Time"),
+                            Text(style: const TextStyle(color: Colors.white, fontSize: 20), taskList[index].taskName),
+                            Text(style: const TextStyle(color: Colors.white, fontSize: 17), taskList[index].time.format(context).toString()),
                           ],
                         ),
                       ),
                       const Spacer(),
-                      Switch(value: true, onChanged: (bool value) {})
+                      Visibility(
+                        visible: !_isEditMode,
+                        child: Switch(value: true, onChanged: (bool value) {}))
                     ],
                   ),
                 )
