@@ -13,7 +13,7 @@ class _WorksPageState extends State<WorksPage> {
     return Scaffold(
         backgroundColor: Colors.black87,
         appBar: AppBar(
-          title: const Text("Tasks"),
+          title: const Text("Works"),
           titleTextStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
           centerTitle: true,
           backgroundColor: Colors.black87,
