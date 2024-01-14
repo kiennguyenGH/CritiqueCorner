@@ -6,6 +6,11 @@ class Task {
   bool isEnabled;
   Task(this.taskName, this.time, this.isEnabled);
 
+  void toggleEnable()
+  {
+    isEnabled = !isEnabled;
+  }
+
   @override
   String toString()
   {

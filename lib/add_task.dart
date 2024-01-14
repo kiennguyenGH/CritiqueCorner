@@ -45,6 +45,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
             child: SizedBox(
               width:250,
               child: TextField(
+                style: const TextStyle(color: Colors.white, fontSize: 17),
                 controller: _textController,
                 decoration: const InputDecoration(
                   labelText: "Task Label",

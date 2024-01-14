@@ -13,6 +13,7 @@ class _TaskPage extends State<TaskPage> {
 
   bool _isEditMode = false;
   String _editModeText = "Edit";
+  static List<Task> taskList = <Task> [];
 
   void createNewTask(Task newTask)
   {
@@ -30,17 +31,6 @@ class _TaskPage extends State<TaskPage> {
       taskList.remove(taskList[index]);
     });
   }
-
-  // void createAlert()
-  // {
-  //   showDialog(context: context,
-  //   builder:(context)
-  //   {
-  //     return const DialogBox();
-  //   });
-  // }
-
-  List<Task> taskList = <Task> [];
 
   void _editModeToggle() {
     setState(() {
@@ -74,18 +64,21 @@ class _TaskPage extends State<TaskPage> {
           ),
         ),
         actions: <Widget>[
-            IconButton(
-              color: Colors.redAccent,
-              iconSize: 30,
-              onPressed: () async {
-                final newValue = await Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => const AddTaskPage())
-                );
-                createNewTask(newValue);
+            Visibility(
+              visible: !_isEditMode,
+              child: IconButton(
+                color: Colors.redAccent,
+                iconSize: 30,
+                onPressed: () async {
+                  final newValue = await Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => const AddTaskPage())
+                  );
+                  createNewTask(newValue);
 
-              },
-              icon: const Icon(Icons.add)
-          ),
+                },
+                icon: const Icon(Icons.add)
+                        ),
+            ),
         ],
       ),
       body: ListView.builder(
@@ -107,7 +100,7 @@ class _TaskPage extends State<TaskPage> {
                           visible: _isEditMode,
                           child: IconButton(
                             iconSize: 35,
-                            onPressed: () async {
+                            onPressed: () {
                               showDialog(context: context, builder:(context)
                                 {
                                   return AlertDialog(
@@ -146,7 +139,7 @@ class _TaskPage extends State<TaskPage> {
                                             ],
                                           )
                                       )
-                                  );;
+                                  );
                                 });
                             },
                             icon: const Icon(Icons.delete),
@@ -167,7 +160,13 @@ class _TaskPage extends State<TaskPage> {
                       const Spacer(),
                       Visibility(
                         visible: !_isEditMode,
-                        child: Switch(value: true, onChanged: (bool value) {}))
+                        child: Switch(value: taskList[index].isEnabled, onChanged: (value) {
+                          {
+                            setState(() {
+                              taskList[index].toggleEnable();
+                            });
+                          }
+                        }))
                     ],
                   ),
                 )
