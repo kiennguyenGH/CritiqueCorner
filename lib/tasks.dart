@@ -160,7 +160,7 @@ class _TaskPage extends State<TaskPage> {
                       const Spacer(),
                       Visibility(
                         visible: !_isEditMode,
-                        child: Switch(value: taskList[index].isEnabled, onChanged: (value) {
+                        child: Switch(activeTrackColor: Colors.redAccent,value: taskList[index].isEnabled, onChanged: (value) {
                           {
                             setState(() {
                               taskList[index].toggleEnable();

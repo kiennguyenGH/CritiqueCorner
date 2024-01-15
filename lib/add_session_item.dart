@@ -19,6 +19,30 @@ class _AddSessionItemPageState extends State<AddSessionItemPage> {
   int min = 0;
   int sec = 0;
 
+  bool _isTextFieldNotEmpty = false;
+  Color buttonColor = Colors.white24;
+
+  void isEmpty()
+  {
+    setState(() {
+      if (_textController.text.isNotEmpty && (hour + min + sec != 0))
+      {
+        _isTextFieldNotEmpty = true;
+        buttonColor = Colors.redAccent;
+      }
+      else
+      {
+        _isTextFieldNotEmpty = false;
+        buttonColor = Colors.white24;
+      }
+    });
+  }
+
+  String twoDigits(int num)
+  {
+    return num.toString().padLeft(2, '0');
+  }
+
   void changeHour(int num)
   {
     setState(() {
@@ -39,6 +63,7 @@ class _AddSessionItemPageState extends State<AddSessionItemPage> {
       sec = num;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +87,9 @@ class _AddSessionItemPageState extends State<AddSessionItemPage> {
                   child: TextField(
                     style: const TextStyle(color: Colors.white, fontSize: 17),
                     controller: _textController,
+                    onChanged: (value) {
+                      isEmpty();
+                    },
                     decoration: const InputDecoration(
                         labelText: "Label",
                         labelStyle: TextStyle(color: Colors.white24, fontSize: 20),
@@ -93,12 +121,13 @@ class _AddSessionItemPageState extends State<AddSessionItemPage> {
                                   children: hourList,
                                   onSelectedItemChanged: (int value) {
                                     changeHour(value);
+                                    isEmpty();
                                   },
                                 )
                             )
                         );
                       },
-                      child: Text(hour.toString(), style: const TextStyle(color: Colors.white, fontSize: 20),),
+                      child: Text(twoDigits(hour), style: const TextStyle(color: Colors.white, fontSize: 20),),
                     ),
                   ),
                   const SizedBox(width:10),
@@ -110,7 +139,7 @@ class _AddSessionItemPageState extends State<AddSessionItemPage> {
                       heroTag: "MinButton",
                       backgroundColor: Colors.white24,
                       child: Text(
-                        min.toString(),
+                        twoDigits(min),
                         style: const TextStyle(color: Colors.white, fontSize: 20),),
                       onPressed: (){
                         showCupertinoModalPopup(
@@ -127,6 +156,7 @@ class _AddSessionItemPageState extends State<AddSessionItemPage> {
                                 children: minList,
                                 onSelectedItemChanged: (int value) {
                                   changeMin(value);
+                                  isEmpty();
                                 },
                               )
                             )
@@ -158,12 +188,13 @@ class _AddSessionItemPageState extends State<AddSessionItemPage> {
                                   children: minList,
                                   onSelectedItemChanged: (int value) {
                                     changeSec(value);
+                                    isEmpty();
                                   },
                                 )
                             )
                         );
                       },
-                      child: Text('$sec',
+                      child: Text(twoDigits(sec),
                         style: const TextStyle(color: Colors.white, fontSize: 20),),
                     ),
                   ),
@@ -187,11 +218,11 @@ class _AddSessionItemPageState extends State<AddSessionItemPage> {
                 width: 150,
                 child: FloatingActionButton(
                   heroTag: "ConfirmButton",
-                  onPressed: () {
+                  onPressed: (_isTextFieldNotEmpty) ? () {
                   Navigator.of(context).pop(
                     SessionItem(_textController.text, Duration(hours: hour, minutes: min, seconds: sec))
-                  );},
-                  backgroundColor: Colors.redAccent,
+                  );} : null,
+                  backgroundColor: buttonColor,
                   child: const Text(
                     "Confirm",
                     style: TextStyle(color: Colors.white, fontSize: 17),

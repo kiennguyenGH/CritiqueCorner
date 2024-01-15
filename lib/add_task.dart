@@ -11,8 +11,26 @@ class AddTaskPage extends StatefulWidget {
 class _AddTaskPageState extends State<AddTaskPage> {
 
   final _textController = TextEditingController();
-
   TimeOfDay _selectTime = TimeOfDay.now();
+
+  bool _isTextFieldNotEmpty = false;
+  Color buttonColor = Colors.white24;
+
+  void isEmpty()
+  {
+    setState(() {
+      if (_textController.text.isEmpty)
+      {
+        _isTextFieldNotEmpty = false;
+        buttonColor = Colors.white24;
+      }
+      else
+      {
+        _isTextFieldNotEmpty = true;
+        buttonColor = Colors.redAccent;
+      }
+    });
+  }
 
   void _showTimePicker() {
     showTimePicker(
@@ -47,6 +65,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
               child: TextField(
                 style: const TextStyle(color: Colors.white, fontSize: 17),
                 controller: _textController,
+                onChanged: (value) {
+                    isEmpty();
+                  },
                 decoration: const InputDecoration(
                   labelText: "Task Label",
                   labelStyle: TextStyle(color: Colors.white24, fontSize: 20),
@@ -68,7 +89,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   },
                   child: Text(
                     _selectTime.format(context).toString(),
-                    style: const TextStyle(fontSize: 25),
+                    style: const TextStyle(fontSize: 25, color: Colors.white),
                   ),
                 ),
               ),
@@ -78,9 +99,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
             margin: const EdgeInsets.only(top: 50),
             height: 50,
             width: 150,
-            child: FloatingActionButton(onPressed: () {
-              Navigator.of(context).pop(Task(_textController.text, _selectTime, true));},
-              backgroundColor: Colors.redAccent,
+            child: FloatingActionButton(
+              onPressed: _isTextFieldNotEmpty ?
+                () {Navigator.of(context).pop(Task(_textController.text, _selectTime, true));}
+                : null,
+              backgroundColor: buttonColor,
               child: const Text(
                 "Confirm",
                 style: TextStyle(color: Colors.white, fontSize: 17),

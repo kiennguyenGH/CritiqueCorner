@@ -1,6 +1,6 @@
 import 'package:critique_corner/add_session.dart';
+import 'package:critique_corner/session_list.dart';
 import 'package:flutter/material.dart';
-import 'package:critique_corner/task_item.dart';
 
 class SessionPage extends StatefulWidget {
   const SessionPage({super.key});
@@ -14,17 +14,14 @@ class _SessionPageState extends State<SessionPage> {
   bool _isEditMode = false;
   String _editModeText = "Edit";
 
-  void createNewTask(Task newTask)
+  void createNewList(SessionList newList)
   {
     setState(() {
-      if (newTask != null)
-      {
-        sessionList.add(newTask);
-      }
+        sessionList.add(newList);
     });
   }
 
-  void deleteTask(int index)
+  void deleteList(int index)
   {
     setState(() {
       sessionList.remove(sessionList[index]);
@@ -45,7 +42,7 @@ class _SessionPageState extends State<SessionPage> {
     });
   }
 
-  static List<Task> sessionList = <Task> [];
+  static List<SessionList> sessionList = <SessionList> [];
 
   @override
   Widget build(BuildContext context) {
@@ -70,11 +67,11 @@ class _SessionPageState extends State<SessionPage> {
               child: IconButton(
                   color: Colors.redAccent,
                   iconSize: 30,
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    var newValue = await Navigator.push(
                         context, MaterialPageRoute(builder: (context) => const AddSessionPage())
                     );
-                    // createNewTask(newValue);
+                    createNewList(newValue);
 
                   },
                   icon: const Icon(Icons.add)
@@ -132,7 +129,7 @@ class _SessionPageState extends State<SessionPage> {
                                                         child: const Text("Confirm"),
                                                         onPressed: (){
                                                           Navigator.pop(context);
-                                                          deleteTask(index);
+                                                          deleteList(index);
                                                         },
 
                                                       ),
@@ -155,21 +152,10 @@ class _SessionPageState extends State<SessionPage> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(style: const TextStyle(color: Colors.white, fontSize: 20), sessionList[index].taskName),
-                                Text(style: const TextStyle(color: Colors.white, fontSize: 17), sessionList[index].time.format(context).toString()),
+                                Text(style: const TextStyle(color: Colors.white, fontSize: 20), sessionList[index].listLabel),
                               ],
                             ),
                           ),
-                          const Spacer(),
-                          Visibility(
-                              visible: !_isEditMode,
-                              child: Switch(value: sessionList[index].isEnabled, onChanged: (value) {
-                                {
-                                  setState(() {
-                                    sessionList[index].toggleEnable();
-                                  });
-                                }
-                              }))
                         ],
                       ),
                     )

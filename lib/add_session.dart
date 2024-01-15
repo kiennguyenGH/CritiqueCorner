@@ -1,4 +1,5 @@
 import 'package:critique_corner/add_session_item.dart';
+import 'package:critique_corner/session_list.dart';
 import 'package:flutter/material.dart';
 import 'package:critique_corner/session_item.dart';
 
@@ -11,8 +12,26 @@ class AddSessionPage extends StatefulWidget {
 
 class _AddSessionPageState extends State<AddSessionPage> {
 
-  final _textController = TextEditingController();
   List<SessionItem> itemList = <SessionItem> [];
+  final _textController = TextEditingController();
+  bool _isTextFieldNotEmpty = false;
+  Color buttonColor = Colors.white24;
+
+  void isEmpty()
+  {
+    setState(() {
+      if (_textController.text.isNotEmpty && itemList.isNotEmpty)
+      {
+        _isTextFieldNotEmpty = true;
+        buttonColor = Colors.redAccent;
+      }
+      else
+      {
+        _isTextFieldNotEmpty = false;
+        buttonColor = Colors.white24;
+      }
+    });
+  }
 
   void addItem(SessionItem item)
   {
@@ -26,6 +45,11 @@ class _AddSessionPageState extends State<AddSessionPage> {
     setState(() {
       itemList.remove(item);
     });
+  }
+
+  String twoDigits(int num)
+  {
+    return num.toString().padLeft(2, '0');
   }
 
   @override
@@ -50,6 +74,9 @@ class _AddSessionPageState extends State<AddSessionPage> {
                   child: TextField(
                     style: const TextStyle(color: Colors.white, fontSize: 17),
                     controller: _textController,
+                    onChanged: (value) {
+                      isEmpty();
+                    },
                     decoration: const InputDecoration(
                         labelText: "Session Label",
                         labelStyle: TextStyle(color: Colors.white24, fontSize: 20),
@@ -76,6 +103,7 @@ class _AddSessionPageState extends State<AddSessionPage> {
                               onPressed: () async {
                                 final newValue = await Navigator.push(context, MaterialPageRoute(builder: (context) => const AddSessionItemPage()));
                                 addItem(newValue);
+                                isEmpty();
                               },
                               child: const Icon(Icons.add, color: Colors.white)),
                         ),
@@ -91,6 +119,7 @@ class _AddSessionPageState extends State<AddSessionPage> {
                               IconButton(
                                 onPressed: (){
                                   deleteItem(itemList[index]);
+                                  isEmpty();
                                 },
                                 icon: const Icon(Icons.delete),
                                 color: Colors.redAccent,
@@ -104,7 +133,7 @@ class _AddSessionPageState extends State<AddSessionPage> {
                                   style: const TextStyle(color: Colors.white, fontSize: 20),
                                 ),
                               ),
-                              Text('${itemList[index].timeLength.inHours}:${itemList[index].timeLength.inMinutes}:${itemList[index].timeLength.inSeconds}',
+                              Text('${twoDigits(itemList[index].timeLength.inHours)}:${twoDigits(itemList[index].timeLength.inMinutes.remainder(60))}:${twoDigits(itemList[index].timeLength.inSeconds.remainder(60))}',
                                   style: const TextStyle(color: Colors.white, fontSize: 20)
                               )
                             ],
@@ -122,10 +151,10 @@ class _AddSessionPageState extends State<AddSessionPage> {
                   width: 150,
                   child: FloatingActionButton(
                     heroTag: "ConfirmSessionButton",
-                    onPressed: () {
-                      Navigator.of(context).pop(context);
-                      },
-                    backgroundColor: Colors.redAccent,
+                    onPressed: (_isTextFieldNotEmpty) ? () {
+                      Navigator.of(context).pop(SessionList(_textController.text, itemList));
+                      } : null,
+                    backgroundColor: buttonColor,
                     child: const Text(
                       "Confirm",
                       style: TextStyle(color: Colors.white, fontSize: 17),
