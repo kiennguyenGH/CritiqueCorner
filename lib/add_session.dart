@@ -87,60 +87,63 @@ class _AddSessionPageState extends State<AddSessionPage> {
               ),
               Expanded(
                 flex: 55,
-                child: ListView.builder(
-                  itemCount: itemList.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == itemList.length)
-                    {
-                      return Center(
-                        heightFactor: 2,
-                        child: SizedBox(
-                          height: 30,
-                          child: FloatingActionButton(
-                              heroTag: "AddSessionButton",
-                              shape: const CircleBorder(),
-                              backgroundColor: Colors.green,
-                              onPressed: () async {
-                                final newValue = await Navigator.push(context, MaterialPageRoute(builder: (context) => const AddSessionItemPage()));
-                                addItem(newValue);
-                                isEmpty();
-                              },
-                              child: const Icon(Icons.add, color: Colors.white)),
-                        ),
-                      );
-                    }
-                    else
-                    {
-                      return Container(
-                          color: Colors.white10,
-                          height: 100,
-                          child: Row(
-                            children: [
-                              IconButton(
-                                onPressed: (){
-                                  deleteItem(itemList[index]);
+                child: Container(
+                  color: Colors.black12,
+                  child: ListView.builder(
+                    itemCount: itemList.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index == itemList.length)
+                      {
+                        return Center(
+                          heightFactor: 2,
+                          child: SizedBox(
+                            height: 30,
+                            child: FloatingActionButton(
+                                heroTag: "AddSessionButton",
+                                shape: const CircleBorder(),
+                                backgroundColor: Colors.green,
+                                onPressed: () async {
+                                  final newValue = await Navigator.push(context, MaterialPageRoute(builder: (context) => const AddSessionItemPage()));
+                                  addItem(newValue);
                                   isEmpty();
                                 },
-                                icon: const Icon(Icons.delete),
-                                color: Colors.redAccent,
-                                iconSize: 30
-                              ),
-                              Container(
-                                padding: const EdgeInsets.only(left:10),
-                                width: 200,
-                                child: Text(
-                                  itemList[index].sessionLabel,
-                                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                                child: const Icon(Icons.add, color: Colors.white)),
+                          ),
+                        );
+                      }
+                      else
+                      {
+                        return Container(
+                            color: Colors.white10,
+                            height: 100,
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  onPressed: (){
+                                    deleteItem(itemList[index]);
+                                    isEmpty();
+                                  },
+                                  icon: const Icon(Icons.delete),
+                                  color: Colors.redAccent,
+                                  iconSize: 30
                                 ),
-                              ),
-                              Text('${twoDigits(itemList[index].timeLength.inHours)}:${twoDigits(itemList[index].timeLength.inMinutes.remainder(60))}:${twoDigits(itemList[index].timeLength.inSeconds.remainder(60))}',
-                                  style: const TextStyle(color: Colors.white, fontSize: 20)
-                              )
-                            ],
-                          )
-                      );
-                    }
-                  },
+                                Container(
+                                  padding: const EdgeInsets.only(left:10),
+                                  width: 200,
+                                  child: Text(
+                                    itemList[index].sessionLabel,
+                                    style: const TextStyle(color: Colors.white, fontSize: 20),
+                                  ),
+                                ),
+                                Text('${twoDigits(itemList[index].timeLength.inHours)}:${twoDigits(itemList[index].timeLength.inMinutes.remainder(60))}:${twoDigits(itemList[index].timeLength.inSeconds.remainder(60))}',
+                                    style: const TextStyle(color: Colors.white, fontSize: 20)
+                                )
+                              ],
+                            )
+                        );
+                      }
+                    },
+                  ),
                 ),
               ),
               Expanded(

@@ -18,10 +18,7 @@ class _TaskPage extends State<TaskPage> {
   void createNewTask(Task newTask)
   {
     setState(() {
-      if (newTask != null)
-      {
-        taskList.add(newTask);
-      }
+      taskList.add(newTask);
     });
   }
 
