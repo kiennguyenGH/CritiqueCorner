@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:critique_corner/session_list.dart';
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class SessionPlayerPage extends StatefulWidget {
 
@@ -14,11 +14,14 @@ class SessionPlayerPage extends StatefulWidget {
 
 class _SessionPlayerPageState extends State<SessionPlayerPage> {
 
+
+
   int index = 0;
   bool isPlaying = false;
   Duration duration = const Duration();
   IconData playIcon = Icons.play_arrow;
   Timer? timer;
+  final player = AudioPlayer();
 
   @override
   void initState()
@@ -31,9 +34,14 @@ class _SessionPlayerPageState extends State<SessionPlayerPage> {
     );
   }
 
+  Future<void> playAudio() async {
+    await player.play(AssetSource('timersoundeffect.mp3'));
+  }
+
   @override
   void dispose()
   {
+    player.dispose();
     timer?.cancel();
     super.dispose();
   }
@@ -51,6 +59,7 @@ class _SessionPlayerPageState extends State<SessionPlayerPage> {
       }
       else if (seconds < 0)
       {
+        playAudio();
         timer?.cancel();
       }
       else
@@ -72,6 +81,7 @@ class _SessionPlayerPageState extends State<SessionPlayerPage> {
   void updateTimer()
   {
     setState(() {
+      playAudio();
       index++;
       duration = Duration(
           hours: widget.session.list[index].timeLength.inHours,
