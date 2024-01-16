@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:critique_corner/session_list.dart';
 import 'package:flutter/material.dart';
 
@@ -13,16 +15,110 @@ class SessionPlayerPage extends StatefulWidget {
 class _SessionPlayerPageState extends State<SessionPlayerPage> {
 
   int index = 0;
+  bool isPlaying = false;
+  Duration duration = const Duration();
+  IconData playIcon = Icons.play_arrow;
+  Timer? timer;
+
+  @override
+  void initState()
+  {
+    super.initState();
+    duration = Duration(
+        hours: widget.session.list[index].timeLength.inHours,
+        minutes: widget.session.list[index].timeLength.inMinutes,
+        seconds: widget.session.list[index].timeLength.inSeconds
+    );
+  }
+
+  @override
+  void dispose()
+  {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  void addTime()
+  {
+    const addSeconds = -1;
+
+
+    setState(() {
+      final seconds = duration.inSeconds + addSeconds;
+
+      if (seconds < 0 && index < widget.session.list.length - 1) {
+        updateTimer();
+      }
+      else if (seconds < 0)
+      {
+        timer?.cancel();
+      }
+      else
+      {
+        duration = Duration(seconds: seconds);
+      }
+    });
+  }
+
+  void startTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (_) => addTime());
+  }
 
   String twoDigits(int num)
   {
     return num.toString().padLeft(2, '0');
   }
 
-  void resetIndex()
+  void updateTimer()
   {
     setState(() {
+      index++;
+      duration = Duration(
+          hours: widget.session.list[index].timeLength.inHours,
+          minutes: widget.session.list[index].timeLength.inMinutes,
+          seconds: widget.session.list[index].timeLength.inSeconds
+      );
+    });
+  }
+
+  void resetTimer()
+  {
+    if (isPlaying)
+    {
+      pauseTimer();
+    }
+    setState(() {
+      isPlaying = false;
+      playIcon = Icons.play_arrow;
       index = 0;
+      duration = Duration(
+          hours: widget.session.list[index].timeLength.inHours,
+          minutes: widget.session.list[index].timeLength.inMinutes,
+          seconds: widget.session.list[index].timeLength.inSeconds
+      );
+    });
+  }
+
+  void pauseTimer()
+  {
+    setState(() {
+      timer?.cancel();
+    });
+  }
+
+  void changeButton()
+  {
+    setState(() {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        startTimer();
+        playIcon = Icons.pause;
+      }
+      else
+      {
+        pauseTimer();
+        playIcon = Icons.play_arrow;
+      }
     });
   }
 
@@ -59,32 +155,38 @@ class _SessionPlayerPageState extends State<SessionPlayerPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(twoDigits(widget.session.list[index].timeLength.inHours.remainder(60)),
+                  Text(twoDigits(duration.inHours.remainder(60)),
                     style: const TextStyle(color: Colors.white, fontSize: 50),
                   ),
-                  Text(twoDigits(widget.session.list[index].timeLength.inMinutes.remainder(60)),
+                  Text(twoDigits(duration.inMinutes.remainder(60)),
                     style: const TextStyle(color: Colors.white, fontSize: 50),
                   ),
-                  Text(twoDigits(widget.session.list[index].timeLength.inSeconds.remainder(60)),
+                  Text(twoDigits(duration.inSeconds.remainder(60)),
                     style: const TextStyle(color: Colors.white, fontSize: 50),
                   ),
                 ],
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top:40),
+              margin: const EdgeInsets.only(top:40),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   FloatingActionButton(
                     heroTag: "PlayButton",
-                    onPressed: (){},
-                    child: Icon(Icons.play_arrow),),
-                  SizedBox(width: 30),
+                    shape: const CircleBorder(),
+                    onPressed: (){
+                      changeButton();
+                    },
+                    child: Icon(playIcon),),
+                  const SizedBox(width: 30),
                   FloatingActionButton(
                     heroTag: "StopButton",
-                    onPressed: (){},
-                    child: Icon(Icons.stop),),
+                    shape: const CircleBorder(),
+                    onPressed: (){
+                      resetTimer();
+                    },
+                    child: const Icon(Icons.stop),),
                 ],
               ),
             ),
