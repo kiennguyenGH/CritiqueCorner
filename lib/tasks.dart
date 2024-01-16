@@ -70,11 +70,13 @@ class _TaskPage extends State<TaskPage> {
                   final newValue = await Navigator.push(
                     context, MaterialPageRoute(builder: (context) => const AddTaskPage())
                   );
-                  createNewTask(newValue);
-
+                  if (newValue != null)
+                  {
+                    createNewTask(newValue);
+                  }
                 },
                 icon: const Icon(Icons.add)
-                        ),
+              ),
             ),
         ],
       ),

@@ -104,7 +104,10 @@ class _AddSessionPageState extends State<AddSessionPage> {
                                 backgroundColor: Colors.green,
                                 onPressed: () async {
                                   final newValue = await Navigator.push(context, MaterialPageRoute(builder: (context) => const AddSessionItemPage()));
-                                  addItem(newValue);
+                                  if (newValue != null)
+                                  {
+                                    addItem(newValue);
+                                  }
                                   isEmpty();
                                 },
                                 child: const Icon(Icons.add, color: Colors.white)),

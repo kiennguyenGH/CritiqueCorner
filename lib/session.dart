@@ -72,8 +72,10 @@ class _SessionPageState extends State<SessionPage> {
                     var newValue = await Navigator.push(
                         context, MaterialPageRoute(builder: (context) => const AddSessionPage())
                     );
-                    createNewList(newValue);
-
+                    if (newValue != null)
+                    {
+                      createNewList(newValue);
+                    }
                   },
                   icon: const Icon(Icons.add)
               ),
