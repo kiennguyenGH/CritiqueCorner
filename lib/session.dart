@@ -92,8 +92,8 @@ class _SessionPageState extends State<SessionPage> {
                   color: Colors.black12,
                   child: ListTile(
                       onTap: !_isEditMode ? (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SessionPlayerPage(sessionList[index]))
-                        );
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => SessionPlayerPage(sessionList[index])));
                       } : null,
                       trailing: Visibility(
                         visible: !_isEditMode,

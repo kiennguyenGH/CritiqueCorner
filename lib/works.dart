@@ -1,5 +1,6 @@
 import 'package:critique_corner/add_works.dart';
 import 'package:critique_corner/work_item.dart';
+import 'package:critique_corner/works_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -54,15 +55,15 @@ class _WorksPageState extends State<WorksPage> {
           ],
         ),
         body: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
             itemCount: worksList.length,
             itemBuilder: (context, index)
             {
               return Padding(
                 padding: const EdgeInsets.all(8),
                 child: Container(
-                    height: 50,
-                    width: 50,
+                    // height: 50,
+                    // width: 50,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: worksList[index].picture,
@@ -70,7 +71,10 @@ class _WorksPageState extends State<WorksPage> {
                       ),
                     ),
                     child: ListTile(
-                      onTap: (){},
+                      onTap: (){
+                        Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => WorksViewerPage(worksList[index])));
+                      },
                       onLongPress: (){
                         showCupertinoModalPopup(context: context,
                             builder: (BuildContext context) => CupertinoActionSheet(
