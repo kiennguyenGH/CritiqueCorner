@@ -16,6 +16,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
   bool _isTextFieldNotEmpty = false;
   Color buttonColor = Colors.white24;
 
+  int generateID()
+  {
+    return DateTime.now().microsecondsSinceEpoch.remainder(100000);
+  }
+
   void isEmpty()
   {
     setState(() {
@@ -101,7 +106,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
             width: 150,
             child: FloatingActionButton(
               onPressed: _isTextFieldNotEmpty ?
-                () {Navigator.of(context).pop(Task(_textController.text, _selectTime, true));}
+                () {Navigator.of(context).pop(Task(generateID(), _textController.text, _selectTime, true));}
                 : null,
               backgroundColor: buttonColor,
               child: const Text(

@@ -1,12 +1,32 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:critique_corner/home.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  await AwesomeNotifications().initialize(
+    null,
+    [
+      NotificationChannel(
+        channelGroupKey: "channel_group",
+        channelKey: "basic_channel",
+        channelName: "notification",
+        channelDescription: "description",
+        importance: NotificationImportance.Max,
+        playSound: true,
+        enableVibration: true,
+      )
+    ],
+    channelGroups: [
+      NotificationChannelGroup(channelGroupKey: "channel_group", channelGroupName: "GroupName")
+    ]
+  );
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   // This widget is the root of your application.
   @override

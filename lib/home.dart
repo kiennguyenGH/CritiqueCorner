@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:critique_corner/session.dart';
 import 'package:critique_corner/tasks.dart';
 import 'package:critique_corner/works.dart';
@@ -30,6 +31,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    @override
+    void initState() {
+      super.initState();
+      AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+        if (!isAllowed) {
+          AwesomeNotifications().requestPermissionToSendNotifications();
+        }
+      });
+    }
+
     return Scaffold(
       body: _pages[_index],
       bottomNavigationBar: BottomNavigationBar(

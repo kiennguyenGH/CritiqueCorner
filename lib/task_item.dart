@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class Task {
+  int id;
   String taskName;
   TimeOfDay time;
   bool isEnabled;
-  Task(this.taskName, this.time, this.isEnabled);
+  Task(this.id, this.taskName, this.time, this.isEnabled);
 
   void toggleEnable()
   {

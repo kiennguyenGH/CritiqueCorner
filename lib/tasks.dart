@@ -1,4 +1,5 @@
 import 'package:critique_corner/add_task.dart';
+import 'package:critique_corner/notifications.dart';
 import 'package:critique_corner/task_item.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +19,7 @@ class _TaskPage extends State<TaskPage> {
   void createNewTask(Task newTask)
   {
     setState(() {
+      createTaskNotification(newTask);
       taskList.add(newTask);
     });
   }
@@ -128,6 +130,7 @@ class _TaskPage extends State<TaskPage> {
                                                       child: const Text("Confirm"),
                                                       onPressed: (){
                                                         Navigator.pop(context);
+                                                        cancelNotification(taskList[index]);
                                                         deleteTask(index);
                                                       },
 
@@ -164,6 +167,13 @@ class _TaskPage extends State<TaskPage> {
                             setState(() {
                               taskList[index].toggleEnable();
                             });
+                            if (taskList[index].isEnabled) {
+                              createTaskNotification(taskList[index]);
+                            }
+                            else
+                            {
+                              cancelNotification(taskList[index]);
+                            }
                           }
                         }))
                     ],
